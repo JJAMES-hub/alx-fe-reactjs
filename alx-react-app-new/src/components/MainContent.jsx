@@ -1,9 +1,11 @@
- function MainContent() {
+function MainContent() {
   return (
-    <main style={{ padding: '20px', backgroundColor: '#eef', minHeight: '60vh' }}>
-      <h2 style={{ textAlign: 'center' }}>Welcome to My Favorite Cities Page</h2>
-      <p style={{ textAlign: 'center' }}>Explore some cool cities and learn interesting facts about them!</p>
-    </main>
+    <div>
+      <main style={{ padding: '20px', backgroundColor: '#eef', minHeight: '60vh' }}>
+        <h2 style={{ textAlign: 'center' }}>Welcome to My Favorite Cities Page</h2>
+        <p style={{ textAlign: 'center' }}>Explore some cool cities and learn interesting facts about them!</p>
+      </main>
+    </div>
   );
 }
 
