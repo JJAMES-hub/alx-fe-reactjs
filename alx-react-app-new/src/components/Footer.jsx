@@ -3,3 +3,5 @@
    <p>Age: <span style={{ fontWeight: 'bold' }}>{props.age}</span></p>
    <p>Bio: {props.bio}</p>
  </div>
+
+ export default Footer;
