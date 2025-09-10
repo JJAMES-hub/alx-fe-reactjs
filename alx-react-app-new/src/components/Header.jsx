@@ -1,9 +1,10 @@
-function Header() {
+function WelcomeMessage() {
   return (
-    <header style={{ backgroundColor: 'navy', color: 'white', textAlign: 'center', padding: '15px' }}>
-      <h1>My Favorite Cities</h1>
-    </header>
-  );
+    <h1
+    style={{ backgroundColor: 'green', color: 'white ', textAlign: 'center' }} >
+      Welcome to my app!
+    </h1>
+  )
 }
 
-export default Header;
+export default WelcomeMessage
