@@ -1,33 +1,63 @@
-import { useState } from 'react'
-import useRecipeStore from '../recipeStore'
+import React, { useState } from 'react';
+import useRecipeStore from '../recipeStore';
 
-export default function AddRecipeForm() {
-  const addRecipe = useRecipeStore((state) => state.addRecipe)
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
+const AddRecipeForm = () => {
+  const addRecipe = useRecipeStore((state) => state.addRecipe);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    if (!title.trim() || !description.trim()) return
-    addRecipe({ id: Date.now(), title, description })
-    setTitle('')
-    setDescription('')
-  }
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (!title || !description) return;
+    addRecipe({ id: Date.now(), title, description });
+    setTitle('');
+    setDescription('');
+  };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form
+      onSubmit={handleSubmit}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        maxWidth: '400px',
+        margin: '0 auto',
+        gap: '10px',
+      }}
+    >
       <input
         type="text"
         placeholder="Recipe title"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
+        style={{ padding: '10px', border: '1px solid #ccc', borderRadius: '5px' }}
       />
       <textarea
         placeholder="Recipe description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
+        style={{
+          padding: '10px',
+          border: '1px solid #ccc',
+          borderRadius: '5px',
+          minHeight: '80px',
+        }}
       />
-      <button type="submit">Add Recipe</button>
+      <button
+        type="submit"
+        style={{
+          padding: '10px',
+          backgroundColor: '#4CAF50',
+          color: 'white',
+          border: 'none',
+          borderRadius: '5px',
+          cursor: 'pointer',
+        }}
+      >
+        Add Recipe
+      </button>
     </form>
-  )
-}
+  );
+};
+
+export default AddRecipeForm;
