@@ -1,118 +1,101 @@
-import { useState } from "react";
-import { searchUsers } from "../services/githubService";
+import React, { useState } from "react"
+import { searchUsers } from "../services/githubService"
 
 function Search() {
-  const [username, setUsername] = useState("");
-  const [location, setLocation] = useState("");
-  const [minRepos, setMinRepos] = useState("");
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [query, setQuery] = useState("")
+  const [location, setLocation] = useState("")
+  const [minRepos, setMinRepos] = useState("")
+  const [results, setResults] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(false);
-    setUsers([]);
+  const handleSearch = async (e) => {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
 
     try {
-      // Build query string
-      let query = username;
-      if (location) query += `+location:${location}`;
-      if (minRepos) query += `+repos:>${minRepos}`;
-
-      const data = await searchUsers(query);
-
-      if (data.length === 0) {
-        setError(true);
-      } else {
-        setUsers(data);
-      }
-    } catch {
-      setError(true);
+      const users = await searchUsers({ query, location, minRepos })
+      setResults(users)
+    } catch (err) {
+      setError("Failed to fetch users. Please try again.")
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
-    <div className="max-w-xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4 text-center">
-        GitHub User Search
-      </h1>
-
+    <div className="p-6 max-w-2xl mx-auto">
       {/* Search Form */}
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col gap-3 bg-gray-100 p-4 rounded-lg shadow"
-      >
+      <form onSubmit={handleSearch} className="flex flex-col gap-4 mb-6">
         <input
           type="text"
-          placeholder="Enter username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="p-2 border rounded"
+          placeholder="Search username..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          className="border p-2 rounded-lg"
         />
+
         <input
           type="text"
-          placeholder="Enter location (optional)"
+          placeholder="Location (e.g., Kenya)"
           value={location}
           onChange={(e) => setLocation(e.target.value)}
-          className="p-2 border rounded"
+          className="border p-2 rounded-lg"
         />
+
         <input
           type="number"
-          placeholder="Minimum repos (optional)"
+          placeholder="Minimum Repos"
           value={minRepos}
           onChange={(e) => setMinRepos(e.target.value)}
-          className="p-2 border rounded"
+          className="border p-2 rounded-lg"
         />
+
         <button
           type="submit"
-          className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+          disabled={loading}
+          className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700"
         >
-          Search
+          {loading ? "Searching..." : "Search"}
         </button>
       </form>
 
-      {/* Messages */}
-      {loading && <p className="mt-4 text-center">Loading...</p>}
-      {error && (
-        <p className="mt-4 text-center text-red-500">
-          Looks like we cant find the user
-        </p>
-      )}
+      {/* Error message */}
+      {error && <p className="text-red-500">{error}</p>}
 
       {/* Results */}
-      <div className="mt-6 space-y-4">
-        {users.map((user) => (
-          <div
+      <ul className="grid gap-4">
+        {results.map((user) => (
+          <li
             key={user.id}
-            className="flex items-center gap-4 p-3 border rounded shadow"
+            className="p-4 border rounded-lg shadow flex items-center gap-4"
           >
             <img
               src={user.avatar_url}
               alt={user.login}
-              className="w-16 h-16 rounded-full"
+              className="w-12 h-12 rounded-full"
             />
             <div>
-              <p className="font-semibold">{user.login}</p>
               <a
                 href={user.html_url}
                 target="_blank"
                 rel="noreferrer"
-                className="text-blue-600 hover:underline"
+                className="font-bold text-blue-600"
               >
-                View Profile
+                {user.login}
               </a>
+              <p className="text-gray-500">ID: {user.id}</p>
             </div>
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
-  );
+  )
 }
 
-export default Search;
+export default Search
+
+
 
 
