@@ -1,71 +1,72 @@
+import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { useEffect, useState } from "react";
 
-const RecipeDetail = () => {
+function RecipeDetail() {
   const { id } = useParams();
   const [recipe, setRecipe] = useState(null);
 
   useEffect(() => {
-    fetch("/data.json")
+    fetch("/src/data.json")
       .then((res) => res.json())
       .then((data) => {
-        const foundRecipe = Array.isArray(data.recipes)
-          ? data.recipes.find((item) => item.id.toString() === id)
-          : data.find((item) => item.id.toString() === id);
+        const foundRecipe = data.find((r) => r.id === parseInt(id));
         setRecipe(foundRecipe);
-      });
+      })
+      .catch((err) => console.error("Error loading recipe:", err));
   }, [id]);
 
   if (!recipe) {
     return (
-      <p className="text-center mt-20 text-gray-600 text-lg animate-pulse">
+      <div className="text-center text-gray-600 mt-10">
         Loading recipe details...
-      </p>
+      </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-gray-50 min-h-screen">
-      <Link
-        to="/"
-        className="inline-block mb-6 text-blue-600 hover:underline text-sm"
-      >
-        ← Back to Home
-      </Link>
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-md p-6">
+        <img
+          src={recipe.image}
+          alt={recipe.title}
+          className="w-full h-64 object-cover rounded-lg mb-6"
+        />
+        <h1 className="text-3xl font-bold mb-4 text-gray-800">
+          {recipe.title}
+        </h1>
+        <p className="text-gray-700 mb-6">{recipe.summary}</p>
 
-      <h1 className="text-3xl font-bold text-gray-800 mb-4">
-        {recipe.title}
-      </h1>
+        <div className="mb-6">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-2">
+            Ingredients
+          </h2>
+          <ul className="list-disc list-inside text-gray-700 space-y-1">
+            {recipe.ingredients.map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+        </div>
 
-      <img
-        src={recipe.image}
-        alt={recipe.title}
-        className="rounded-2xl shadow-lg mb-6 w-full h-80 object-cover"
-      />
+        <div className="mb-6">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-2">
+            Instructions
+          </h2>
+          <ol className="list-decimal list-inside text-gray-700 space-y-2">
+            {recipe.instructions.map((step, index) => (
+              <li key={index}>{step}</li>
+            ))}
+          </ol>
+        </div>
 
-      <section className="bg-white p-6 rounded-xl shadow-md mb-8">
-        <h2 className="text-2xl font-semibold text-gray-700 mb-3">
-          Ingredients
-        </h2>
-        <ul className="list-disc list-inside text-gray-600 space-y-1">
-          {recipe.ingredients.map((item, index) => (
-            <li key={index}>{item}</li>
-          ))}
-        </ul>
-      </section>
-
-      <section className="bg-white p-6 rounded-xl shadow-md">
-        <h2 className="text-2xl font-semibold text-gray-700 mb-3">
-          Instructions
-        </h2>
-        <ol className="list-decimal list-inside text-gray-600 space-y-2">
-          {recipe.instructions.map((step, index) => (
-            <li key={index}>{step}</li>
-          ))}
-        </ol>
-      </section>
+        <Link
+          to="/"
+          className="inline-block mt-4 text-indigo-600 hover:underline font-medium"
+        >
+          ← Back to Home
+        </Link>
+      </div>
     </div>
   );
-};
+}
 
 export default RecipeDetail;
