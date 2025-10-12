@@ -1,11 +1,11 @@
-import ControlledForm from "./components/ControlledForm";
+import React from "react";
+import RegistrationForm from "./components/RegistrationForm";
 import FormikForm from "./components/formikForm";
 
 function App() {
   return (
     <div>
-      <h1>User Registration Forms</h1>
-      <ControlledForm />
+      <RegistrationForm />
       <hr />
       <FormikForm />
     </div>
