@@ -1,15 +1,15 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 
-function Post() {
+function BlogPost() {
   const { id } = useParams();
 
   return (
     <div>
-      <h2>Post Details</h2>
-      <p>You are viewing Post #{id}</p>
+      <h2>Blog Post #{id}</h2>
+      <p>This is the content for blog post number {id}.</p>
     </div>
   );
 }
 
-export default Post;
+export default BlogPost;

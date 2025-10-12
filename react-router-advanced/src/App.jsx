@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Profile from "./components/Profile";
-import Post from "./pages/Post";
+import BlogPost from "./pages/BlogPost";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
@@ -13,14 +13,15 @@ function App() {
         <Link to="/" style={{ marginRight: "10px" }}>Home</Link>
         <Link to="/about" style={{ marginRight: "10px" }}>About</Link>
         <Link to="/profile" style={{ marginRight: "10px" }}>Profile</Link>
-        <Link to="/posts/1">Dynamic Post</Link>
+        <Link to="/blog/1">Dynamic Blog</Link>
       </nav>
 
       <Routes>
+        {/* Public Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
 
-        {/* Protected Route Example */}
+        {/* Protected Route */}
         <Route
           path="/profile/*"
           element={
@@ -30,8 +31,8 @@ function App() {
           }
         />
 
-        {/* Dynamic Route Example */}
-        <Route path="/posts/:id" element={<Post />} />
+        {/* Dynamic Route */}
+        <Route path="/blog/:id" element={<BlogPost />} />
       </Routes>
     </Router>
   );
