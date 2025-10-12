@@ -1,52 +1,35 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
-const ControlledForm = () => {
-  const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
+const RegistrationForm = () => {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Basic validation
-    if (!formData.username || !formData.email || !formData.password) {
-      alert("Please fill out all fields before submitting.");
+    if (!username || !email || !password) {
+      setError("All fields are required");
       return;
     }
 
-    console.log("Form submitted:", formData);
-
-    // Mock API call
-    fetch("https://jsonplaceholder.typicode.com/users", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    })
-      .then((res) => res.json())
-      .then((data) => console.log("Mock API Response:", data))
-      .catch((err) => console.error("Error:", err));
+    setError("");
+    console.log("User registered:", { username, email, password });
+    alert("Controlled Form Submitted Successfully!");
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Controlled Component Form</h2>
+    <form onSubmit={handleSubmit} style={{ maxWidth: "400px", margin: "0 auto" }}>
+      <h2>Controlled Registration Form</h2>
+
       <div>
         <label>Username:</label>
         <input
           type="text"
           name="username"
-          value={formData.username}
-          onChange={handleChange}
+          value={username}         
+          onChange={(e) => setUsername(e.target.value)}
         />
       </div>
 
@@ -55,8 +38,8 @@ const ControlledForm = () => {
         <input
           type="email"
           name="email"
-          value={formData.email}
-          onChange={handleChange}
+          value={email}            
+          onChange={(e) => setEmail(e.target.value)}
         />
       </div>
 
@@ -65,14 +48,16 @@ const ControlledForm = () => {
         <input
           type="password"
           name="password"
-          value={formData.password}
-          onChange={handleChange}
+          value={password}       
+          onChange={(e) => setPassword(e.target.value)}
         />
       </div>
+
+      {error && <p style={{ color: "red" }}>{error}</p>}
 
       <button type="submit">Register</button>
     </form>
   );
 };
 
-export default ControlledForm;
+export default RegistrationForm;
