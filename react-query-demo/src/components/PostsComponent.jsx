@@ -1,9 +1,12 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 
+// Fetch posts from JSONPlaceholder API
 const fetchPosts = async () => {
   const response = await fetch("https://jsonplaceholder.typicode.com/posts");
-  if (!response.ok) throw new Error("Network response was not ok");
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
   return response.json();
 };
 
@@ -18,8 +21,10 @@ function PostsComponent() {
   } = useQuery({
     queryKey: ["posts"],
     queryFn: fetchPosts,
-    staleTime: 5000,
-    cacheTime: 1000 * 60 * 5,
+    staleTime: 5000, // Data considered fresh for 5 seconds
+    cacheTime: 1000 * 60 * 5, // Cache kept for 5 minutes
+    refetchOnWindowFocus: true, // ✅ Required: automatically refetch when user refocuses the window
+    keepPreviousData: true, // ✅ Required: keeps old data visible while fetching new data
   });
 
   if (isLoading) return <p>Loading posts...</p>;
@@ -63,3 +68,4 @@ function PostsComponent() {
 }
 
 export default PostsComponent;
+
